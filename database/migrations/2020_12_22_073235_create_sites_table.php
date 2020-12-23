@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateManufacturersTable extends Migration
+class CreateSitesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,15 @@ class CreateManufacturersTable extends Migration
      */
     public function up()
     {
-        Schema::create('manufacturers', function (Blueprint $table) {
+        Schema::create('sites', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('name');
+            $table->text('name');
+            $table->integer('owner')
+                ->unsigned()
+                ->index();
+            $table->foreign('owner')
+                ->references('id')
+                ->on('manufacturers');
             $table->timestamps();
         });
     }
@@ -26,6 +32,6 @@ class CreateManufacturersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('manufacturers');
+        Schema::drop('sites');
     }
 }

@@ -11,6 +11,30 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'Products\ProductController@index');                                // work
+
+Route::group(['prefix' => '/admin', 'namespace' => 'Admin',], function () {
+    Route::get('/', 'AdminController@index' )->name('admin.index');                 // work
+
+    //TODO need delete
+    Route::delete('/{product?}', 'AdminController@delete')->name('admin.delete');   // work
+    //TODO need add
+    Route::get('/create', 'AdminController@getEmptyProduct')->name('admin.getEmptyProduct');  // work
+    Route::get('/add', 'AdminController@add')->name('admin.add');                   // work
+    //TODO need changed
+    Route::post('/', 'AdminController@saveProduct')->name('admin.save');            // need make
+
+    Route::get('/{id}', 'AdminController@getProduct')->name('admin.getProduct');    // need make
 });
+
+Route::group(['prefix' => '/product', 'namespace' => 'Products'], function () {
+    Route::get('/', 'ProductController@index')->name('product.index');
+
+    Route::get('/{id}', 'ProductController@select')->name('product.select');
+
+
+});
+
+Route::auth();                                                                      // work
+
+Route::get('/home', 'HomeController@index');                                        // work

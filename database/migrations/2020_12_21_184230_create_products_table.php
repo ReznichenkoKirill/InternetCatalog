@@ -13,13 +13,22 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->char('name');
             $table->text('description');
-            $table->char('manufacturer_id')
-                ->unsigned()->index();
-            $table->decimal('price' , 8, 2);
-            $table->char('site_manufacturers');
+            $table->integer('manufacturer_id')
+                ->unsigned()
+                ->index();
+            $table->foreign('manufacturer_id')
+                ->references('id')
+                ->on('manufacturers'); // Связка с таблицой производителей по внешнему ключу
+            $table->decimal('price', 8, 2);
+            $table->integer('site_id')
+                ->unsigned()
+                ->index();
+            $table->foreign('site_id')
+                ->references('id')
+                ->on('sites');
             $table->timestamps();
         });
     }
