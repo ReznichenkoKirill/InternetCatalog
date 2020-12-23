@@ -16,20 +16,25 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->char('name');
             $table->text('description');
+            $table->integer('owner_id')
+                    ->unsigned();
             $table->integer('manufacturer_id')
-                ->unsigned()
-                ->index();
-            $table->foreign('manufacturer_id')
-                ->references('id')
-                ->on('manufacturers'); // Связка с таблицой производителей по внешнему ключу
+                ->unsigned();
             $table->decimal('price', 8, 2);
             $table->integer('site_id')
-                ->unsigned()
-                ->index();
+                ->unsigned();
+            $table->timestamps();
+            
+            $table->foreign('owner_id')
+                    ->references('id')
+                    ->on('users');
+            $table->foreign('manufacturer_id')
+                    ->references('id')
+                    ->on('manufacturers'); // Связка с таблицой производителей по внешнему ключу
             $table->foreign('site_id')
                 ->references('id')
                 ->on('sites');
-            $table->timestamps();
+            
         });
     }
 

@@ -35,6 +35,7 @@
                                                 {{csrf_field()}}
                                                 {{method_field('DELETE')}}
                                                 <input type="hidden" value="{{$product->id}}">
+                                                <input type="hidden" name="owner_id" value="{{$product->owner_id}}">
                                                 <input type="submit" value="delete">
                                             </form>
                                         </td>
