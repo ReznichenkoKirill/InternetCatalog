@@ -5,28 +5,29 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Welcome</div>
-                    <div><a href="{{route('admin.getEmptyProduct')}}">create new!</a></div>
+                    <div class="panel-heading">{{trans('validation.admin.panel')}}</div>
+                    <div><a href="{{route('admin.getEmptyProduct')}}" class="btn btn-primary">{{trans('validation.admin.create')}}</a></div>
                     <div class="panel-body">
-                        Your Application's Landing Page.
+                        @include('errors')
                         @if(count($products)>0)
-                            <table>
+                            <table class="table">
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Manufacturer</th>
-                                    <th>Price</th>
-                                    <th>Action</th>
+                                    <th colspan="1" class="text-center">{{trans('validation.product.name')}}</th>
+                                    <th colspan="2" class="text-center">{{trans('validation.product.manufacturer')}}</th>
+                                    <th colspan="1" class="text-center">{{trans('validation.product.price')}}</th>
+                                    <th colspan="2" class="text-center">{{trans('validation.admin.action')}}</th>
                                 </tr>
                             @foreach($products as $product)
                                     <tr>
-                                        <td>{{$product->name}}</td>
-                                        <td>{{$product->manufacturer['name']}}</td>
-                                        <td>{{$product->price}}</td>
-                                        <td>
+                                        <td class="text-center">{{$product->name}}</td>
+                                        <td class="text-center">{{$product->manufacturer['name']}}</td>
+                                        <td class="text-center"><a href="http://{{$product->site->name}}" target="_blank">{{$product->site->name}}</a></td>
+                                        <td class="text-center">{{$product->price}}</td>
+                                        <td class="text-center">
                                             <form action="{{route('admin.getProduct', $product->id)}}" method="GET">
                                                 {{csrf_field()}}
                                                 <input type="hidden" value="{{$product->id}}">
-                                                <input type="submit" value="Change">
+                                                <input type="submit" value="{{trans('validation.admin.change')}}" class="btn btn-warning">
                                             </form>
                                         </td>
                                         <td>
@@ -36,7 +37,7 @@
                                                 {{method_field('DELETE')}}
                                                 <input type="hidden" value="{{$product->id}}">
                                                 <input type="hidden" name="owner_id" value="{{$product->owner_id}}">
-                                                <input type="submit" value="delete">
+                                                <input type="submit" value="{{trans('validation.admin.delete')}}" class="btn btn-danger">
                                             </form>
                                         </td>
                                     </tr>

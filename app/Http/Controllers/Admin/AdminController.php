@@ -22,8 +22,11 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
-        $admin = $request->user();
-        $products = $admin->products;
+//        $admin = $request->user();
+//        $products = $admin->products;
+
+        $products = Product::all();
+
         return view('admin.index', ['products' => $products]);
     }
 
@@ -34,8 +37,6 @@ class AdminController extends Controller
         $sites = Site::all();
 //        dd($product);
         return view('admin.update', ['product'=>$product,'manufacturers' => $manufacturers, 'sites' => $sites]);
-        //TODO GET OLD id row
-
     }
 
     public function saveChange(Request $request)
@@ -43,16 +44,18 @@ class AdminController extends Controller
         $this->validate($request, [
                 'name' => 'required|max:255',
                 'description'=>'required',
-                'manufacturer_id'=> 'required',
+                'manufacturer'=> 'required',
                 'price'=>'required',
-                'site_id'=>'required',
+                'site'=>'required',
         ]);
         $product = Product::find($request->id);
         $product->name = $request->name;
         $product->description = $request->description;
-        $product->manufacturer_id = $request->manufacturer_id;
         $product->price = $request->price;
-        $product->site_id = $request->site_id;
+        $manufacturer_id = $this->getManufacturer($request->manufacturer);
+        $site_id = $this->getSite($request->site, $manufacturer_id);
+        $product->manufacturer_id = $manufacturer_id;
+        $product->site_id = $site_id;
         $product->save();
         return redirect(route('admin.index'));
     }
@@ -75,32 +78,15 @@ class AdminController extends Controller
                 'price'=>'required',
                 'site'=>'required',
                 ]);
-        
+
         $product = new Product();
-        
-        $site = new Site();
         //        $manufacturers = Manufacturer::where('name','23')->orderBy()->get();//collection
-        
         $product->name = $request->name;
         $product->description = $request->description;
-        $manufacturer = Manufacturer::where('name', $request->manufacturer)->first();
-        $site = Site::where('name',$request->site)->first();
-        if(!$manufacturer){ // если ненайдено
-            $manufacturer = new Manufacturer();
-            $manufacturer->name = $request->manufacturer;
-            $manufacturer->save();
-        } else {
-            $product->manufacturer_id = $manufacturer->id;
-        }
-        if(!$site){
-            $site = new Site();
-            $site->name = $request->site;
-            $site->owner = $manufacturer->id;
-            $product->site_id = $site->id;
-            $site->save();
-        }else {
-            $product->site_id = $site->id;
-        }
+        $manufacturer_id = $this->getManufacturer($request->manufacturer);
+        $site_id = $this->getSite($request->site, $manufacturer_id);
+        $product->manufacturer_id = $manufacturer_id;
+        $product->site_id = $site_id;
         $product->price = $request->price;
         $product->owner_id = $request->user()->id;
         $product->save();
@@ -114,5 +100,35 @@ class AdminController extends Controller
         $sites = Site::all();
         return view('admin.create', ['product' => $product, 'manufacturers' => $manufacturers, 'sites' => $sites]);
     }
+
+    private function getManufacturer($request) {
+        $manufacturer = Manufacturer::where('name', $request)->first();
+        if(!$manufacturer) { // если ненайдено
+            $manufacturer = $this->addManufacturer($request);
+        }
+        return $manufacturer->id;
+    }
+    private function addManufacturer($request){
+        $manufacturer = new Manufacturer();
+        $manufacturer->name = $request;
+        $manufacturer->save();
+        return $manufacturer;
+    }
+    private function getSite($request, $manufacturer_id)
+    {
+        $site = Site::where('name', $request)->first();
+        if (!$site) {
+            $site = $this->addSite($request, $manufacturer_id);
+        }
+        return $site->id;
+    }
+    private function addSite($request, $manufacturer_id){
+        $site = new Site();
+        $site->name = $request;
+        $site->owner = $manufacturer_id;
+        $site->save();
+        return $site;
+    }
+
 
 }
