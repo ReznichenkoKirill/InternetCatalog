@@ -15,8 +15,10 @@ class ProductController extends Controller
 {
     public function index(Request $request){
         //TODO get All products
-        $products = Product::all();
-//        dd($request);
+        $products = Product::paginate(5); // создаётся пагинация(отображение колличества элементов на странице, simplePaginate (делает внесто номеров переода, указатели)
+
+//        dd($products->getAttributes());
+//        $products->description = mb_substr($products->description, 0 , 200).'...';
 
         return view('products.index', ['products'=>$products,]);
     }
@@ -28,11 +30,4 @@ class ProductController extends Controller
         return view('products.select', ['product'=>$product]);
     }
 
-
-//    private function getManufacturer($id) {
-//        return $tmp = Manufacturer::find($id)->getAttributes();
-//    }
-//    private function getSite($id){
-//        return $tmp = Site::find($id)->getAttributes();
-//    }
 }

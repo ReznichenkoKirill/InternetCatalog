@@ -26,4 +26,3 @@ Route::group(['prefix' => '/product', 'namespace' => 'Products'], function () {
     Route::get('/{id}', 'ProductController@select')->name('product.select');
 });
 Route::auth();
-Route::get('/home', 'HomeController@index');
