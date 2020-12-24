@@ -109,5 +109,43 @@ return [
     */
 
     'attributes' => [],
+    'admin' => [
+        'panel'=>'Admin panel',
+        'create'=>'Create new product',
+        'creating'=>'New product creation panel',
+        'edition'=>'Editing panel',
+        'action'=>'Action',
+        'change'=>'Change',
+        'delete'=>'Delete',
+        'save'=>'Save changes',
+        'come_back'=>'Back',
+
+    ],
+    'auth'=> [
+        'name'=>'Name',
+        'email'=>'Email',
+        'password'=>'Password',
+        'confirm_password'=>'Confirm password',
+        'remember_me'=>'remember',
+        'login'=>'login',
+        'logout'=>'logout',
+        'home'=>'Home page',
+        'reset_password'=>'Password recovery',
+        'authorization'=>'Authorization',
+        'registration'=>'Registration',
+        'send_reset_password'=>'Send password recovery link',
+    ],
+    'product' => [
+        'id'=>'Product ID number: ',
+        'name'=>'Name',
+        'manufacturer'=>'Manufacturer',
+        'price'=>'Price',
+        'description'=>'Description',
+        'site'=>'Site',
+        'info'=>'More info',
+        'products'=>'Products',
+        'none'=>'There are currently no products',
+        'come_back'=>'Back'
+    ]
 
 ];
